@@ -10,6 +10,6 @@ public class HomePageController {
     @RequestMapping(value = {"", "/", "/home"})
     public String displayHomePage(Model model) {
         model.addAttribute("appName", "MakinSchool");
-        return "UserTemplate.html";
+        return "HomePage.html";
     }
 }
