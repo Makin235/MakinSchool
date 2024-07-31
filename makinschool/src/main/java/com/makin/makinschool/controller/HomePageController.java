@@ -1,4 +1,4 @@
-package com.makin.makinschool.controller.user;
+package com.makin.makinschool.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
