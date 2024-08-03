@@ -1,7 +1,6 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
-<head th:replace="_headTag">
+<head th:replace="_defaultHeadTag">
 </head>
 
 <body>
@@ -338,6 +337,6 @@
 <!-- //call block -->
 
 <div th:replace="_footer"></div>
+<div th:replace="_defaultFooterScriptTag"></div>
 </body>
-
 </html>

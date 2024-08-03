@@ -4,9 +4,8 @@ Author URL: http://w3layouts.com
 -->
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="_headTag">
+<head th:replace="_defaultHeadTag">
 </head>
-
 <body>
 <div th:replace="_header"></div>
 
@@ -40,5 +39,6 @@ Author URL: http://w3layouts.com
 <!-- //banner section -->
 
 <div th:replace="_footer"></div>
+<div th:replace="_defaultFooterScriptTag"></div>
 </body>
 </html>
