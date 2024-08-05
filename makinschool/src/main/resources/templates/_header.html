@@ -1,4 +1,4 @@
-<header id="site-header" class="fixed-top">
+<header id="site-header" class="fixed-top"  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-security6">
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light">
             <a class="navbar-brand" th:href="@{/home}"><i class="fas fa-graduation-cap" ></i><span th:text="${appName}"></span>
@@ -11,22 +11,22 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarScroll">
                 <ul class="navbar-nav ms-auto my-2 my-lg-0 navbar-nav-scroll">
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="isAnonymous">
                         <a class="nav-link active" aria-current="page" th:href="@{/home}">Home</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="isAnonymous">
                         <a class="nav-link" th:href="@{/courses}">Courses</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="isAnonymous">
                         <a class="nav-link" th:href="@{/contact}">Contact</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="isAnonymous">
                         <a class="nav-link" th:href="@{/login}">Login</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="isAuthenticated">
                         <a class="nav-link" th:href="@{/dashboard}">Dashboard</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item" sec:authorize="isAuthenticated">
                         <a class="nav-link" th:href="@{/logout}">Logout</a>
                     </li>
                 </ul>
