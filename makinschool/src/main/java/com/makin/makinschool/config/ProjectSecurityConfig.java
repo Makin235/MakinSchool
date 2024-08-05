@@ -21,18 +21,21 @@ public class ProjectSecurityConfig {
 //                .formLogin(Customizer.withDefaults())
 //                .httpBasic(Customizer.withDefaults());
 
-        http
-            .csrf(csrf -> csrf.disable()) // Disable CSRF protection
-            .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/", "/home").permitAll()
-                    .requestMatchers("/about").permitAll()
-                    .requestMatchers("/courses").denyAll()
-                    .requestMatchers("/holidays/**").permitAll()
-                    .requestMatchers("/contact").authenticated()
-                    .requestMatchers("/assets/**").permitAll()
-            )
-            .formLogin(Customizer.withDefaults()) // Enable form-based login with default settings
-            .httpBasic(Customizer.withDefaults()); // Enable HTTP Basic authentication with default settings
+        http.csrf((csrf) -> csrf.disable())
+                .authorizeHttpRequests((requests) -> requests.requestMatchers("/dashboard").authenticated()
+                        .requestMatchers("/", "/home").permitAll()
+                        .requestMatchers("/holidays/**").permitAll()
+                        .requestMatchers("/contact").permitAll()
+                        .requestMatchers("/saveMsg").permitAll()
+                        .requestMatchers("/courses").permitAll()
+                        .requestMatchers("/about").permitAll()
+                        .requestMatchers("/login").permitAll()
+                        .requestMatchers("/assets/**").permitAll())
+                .formLogin(loginConfigurer -> loginConfigurer.loginPage("/login")
+                        .defaultSuccessUrl("/dashboard").failureUrl("/login?error=true").permitAll())
+                .logout(logoutConfigurer -> logoutConfigurer.logoutSuccessUrl("/login?logout=true")
+                        .invalidateHttpSession(true).permitAll())
+                .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
@@ -42,13 +45,13 @@ public class ProjectSecurityConfig {
         UserDetails admin = User.withDefaultPasswordEncoder()
                 .username("admin")
                 .password("4321")
-                .roles("ADMIN")
+                .roles("USER", "ADMIN")
                 .build();
 
         UserDetails user = User.withDefaultPasswordEncoder()
                 .username("user")
                 .password("1234")
-                .roles("USER", "ADMIN")
+                .roles("USER")
                 .build();
 
         return new InMemoryUserDetailsManager(admin, user);
