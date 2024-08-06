@@ -16,7 +16,6 @@ public class DashboardPageController {
         model.addAttribute("appName", "Makin School");
         model.addAttribute("username", authentication.getName());
         model.addAttribute("roles", authentication.getAuthorities().toString());
-        throw new RuntimeException("Bad day!");
-        //return "dashboard";
+        return "dashboard";
     }
 }

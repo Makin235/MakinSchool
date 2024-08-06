@@ -21,21 +21,25 @@ public class ProjectSecurityConfig {
 //                .formLogin(Customizer.withDefaults())
 //                .httpBasic(Customizer.withDefaults());
 
-        http.csrf((csrf) -> csrf.disable())
-                .authorizeHttpRequests((requests) -> requests.requestMatchers("/dashboard").authenticated()
-                        .requestMatchers("/", "/home").permitAll()
-                        .requestMatchers("/holidays/**").permitAll()
-                        .requestMatchers("/contact").permitAll()
-                        .requestMatchers("/saveMsg").permitAll()
-                        .requestMatchers("/courses").permitAll()
-                        .requestMatchers("/about").permitAll()
-                        .requestMatchers("/login").permitAll()
-                        .requestMatchers("/assets/**").permitAll())
-                .formLogin(loginConfigurer -> loginConfigurer.loginPage("/login")
-                        .defaultSuccessUrl("/dashboard").failureUrl("/login?error=true").permitAll())
-                .logout(logoutConfigurer -> logoutConfigurer.logoutSuccessUrl("/login?logout=true")
-                        .invalidateHttpSession(true).permitAll())
-                .httpBasic(Customizer.withDefaults());
+        http
+            .csrf(csrf ->csrf.ignoringRequestMatchers("/saveMsg"))
+            .authorizeHttpRequests(
+                    requests -> requests
+                    .requestMatchers("/dashboard").authenticated()
+                    .requestMatchers("/", "/home").permitAll()
+                    .requestMatchers("/holidays/**").permitAll()
+                    .requestMatchers("/contact").permitAll()
+                    .requestMatchers("/saveMsg").permitAll()
+                    .requestMatchers("/courses").permitAll()
+                    .requestMatchers("/about").permitAll()
+                    .requestMatchers("/login").permitAll()
+                    .requestMatchers("/logout").permitAll()
+                    .requestMatchers("/assets/**").permitAll())
+            .formLogin(loginConfigurer -> loginConfigurer.loginPage("/login")
+                    .defaultSuccessUrl("/dashboard").failureUrl("/login?error=true").permitAll())
+            .logout(logoutConfigurer -> logoutConfigurer.logoutSuccessUrl("/login?logout=true")
+                    .invalidateHttpSession(true).permitAll())
+            .httpBasic(Customizer.withDefaults());
 
         return http.build();
     }
