@@ -17,6 +17,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.swing.*;
 
+import java.util.List;
+
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Slf4j
@@ -45,5 +47,14 @@ public class ContactPageController {
         }
         contactService.saveMessageDetails(contact);
         return "redirect:/contact";
+    }
+
+    @RequestMapping("/displayMessages")
+    public ModelAndView displayMessages(Model model) {
+        List<ContactModel> contactMsgs = contactService.findMsgsWithOpenStatus();
+        ModelAndView modelAndView = new ModelAndView("messages");
+        modelAndView.addObject("contactMsgs", contactMsgs);
+        modelAndView.addObject("appName", "Makin School");
+        return modelAndView;
     }
 }
