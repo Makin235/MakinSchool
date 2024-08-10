@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.ApplicationScope;
 import org.springframework.web.context.annotation.RequestScope;
@@ -48,5 +49,19 @@ public class ContactService {
     public List<ContactModel> findMsgsWithOpenStatus() {
         List<ContactModel> contactMsgs = contactRepository.findMsgsWithOpenStatus(MakinSchoolConstants.OPEN);
         return contactMsgs;
+    }
+
+    /**
+     * Update contact message status
+     * @param contactId, updatedBy
+     * @return boolean
+     */
+    public boolean updateMsgStatus(int contactId, String updatedBy) {
+        boolean isUpdated = false;
+        int result = contactRepository.updateMsgStatus(contactId, MakinSchoolConstants.CLOSE, updatedBy);
+        if (result > 0) {
+            isUpdated = true;
+        }
+        return isUpdated;
     }
 }
