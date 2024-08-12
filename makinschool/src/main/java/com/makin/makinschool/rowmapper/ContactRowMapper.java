@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ContactRowMapper implements RowMapper<ContactModel> {
+public class   ContactRowMapper implements RowMapper<ContactModel> {
 
     @Override
     public ContactModel mapRow(ResultSet rs, int rowNum) throws SQLException {

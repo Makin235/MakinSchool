@@ -1,6 +1,9 @@
 package com.makin.makinschool.controller;
 
 import com.makin.makinschool.model.HolidayModel;
+import com.makin.makinschool.service.ContactService;
+import com.makin.makinschool.service.HolidayService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +18,9 @@ import java.util.stream.Collectors;
 @Controller
 public class HolidayPageController {
 
+    @Autowired
+    private HolidayService holidayService;
+
     //@GetMapping("/holidays")
     @GetMapping("/holidays/{display}")
     public String displayHolidaysPage(
@@ -22,11 +28,7 @@ public class HolidayPageController {
             //@RequestParam(required = false) boolean federal,
             @PathVariable String display,
             Model model) {
-        List<HolidayModel> holidays = Arrays.asList(
-                new HolidayModel("July 4", "Independence Day", HolidayModel.Type.FEDERAL),
-                new HolidayModel("Sep 5", "Labor Day", HolidayModel.Type.FEDERAL),
-                new HolidayModel("Oct 31", "Halloween", HolidayModel.Type.FESTIVAL)
-        );
+        List<HolidayModel> holidays = holidayService.findAllHolidays();
 
         HolidayModel.Type[] types = HolidayModel.Type.values();
         for (HolidayModel.Type type: types) {
