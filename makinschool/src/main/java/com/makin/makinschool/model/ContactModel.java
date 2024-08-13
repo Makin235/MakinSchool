@@ -1,11 +1,19 @@
 package com.makin.makinschool.model;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.Data;
+import org.hibernate.annotations.GenericGenerator;
 
+@Entity
+@Table(name = "contact_msg")
 @Data
 public class ContactModel extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
+    @GenericGenerator(name = "native", strategy = "native")
+    @Column(name = "contact_id")
     private int contact_id;
 
     @NotBlank(message = "Name must not be blank.")

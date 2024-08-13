@@ -1,28 +1,10 @@
 package com.makin.makinschool.repository;
 
 import com.makin.makinschool.model.HolidayModel;
-import org.apache.catalina.LifecycleState;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.beans.BeanProperty;
-import java.util.List;
-
 @Repository
-public class HolidayRepository {
+public interface HolidayRepository extends CrudRepository<HolidayModel, String> {
 
-    private final JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public HolidayRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
-    public List<HolidayModel> findAllHolidays() {
-        String sql = "SELECT * FROM holidays";
-        var rowMapper = BeanPropertyRowMapper.newInstance(HolidayModel.class);
-        return jdbcTemplate.query(sql, rowMapper);
-    }
 }

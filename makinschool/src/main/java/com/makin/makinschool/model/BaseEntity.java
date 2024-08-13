@@ -1,10 +1,11 @@
 package com.makin.makinschool.model;
 
+import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
+@MappedSuperclass
 @Data
 public class BaseEntity {
 

@@ -1,21 +1,15 @@
 package com.makin.makinschool.service;
 
 import com.makin.makinschool.MakinSchoolConstants;
-import com.makin.makinschool.controller.ContactPageController;
 import com.makin.makinschool.model.ContactModel;
 import com.makin.makinschool.repository.ContactRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.annotation.ApplicationScope;
-import org.springframework.web.context.annotation.RequestScope;
-import org.springframework.web.context.annotation.SessionScope;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -34,8 +28,8 @@ public class ContactService {
         contact.setStatus(MakinSchoolConstants.OPEN);
         contact.setCreatedBy(MakinSchoolConstants.ANONYMOUS);
         contact.setCreatedAt(LocalDateTime.now());
-        int result = contactRepository.saveContactMsg(contact);
-        if (result > 0) {
+        ContactModel savedContact = contactRepository.save(contact);
+        if (null != savedContact && savedContact.getContact_id() > 0) {
             isSaved = true;
         }
         log.info(contact.toString());
@@ -47,7 +41,7 @@ public class ContactService {
      * @return List<ContactModel>
      */
     public List<ContactModel> findMsgsWithOpenStatus() {
-        List<ContactModel> contactMsgs = contactRepository.findMsgsWithOpenStatus(MakinSchoolConstants.OPEN);
+        List<ContactModel> contactMsgs = contactRepository.findByStatus(MakinSchoolConstants.OPEN);
         return contactMsgs;
     }
 
@@ -58,8 +52,15 @@ public class ContactService {
      */
     public boolean updateMsgStatus(int contactId, String updatedBy) {
         boolean isUpdated = false;
-        int result = contactRepository.updateMsgStatus(contactId, MakinSchoolConstants.CLOSE, updatedBy);
-        if (result > 0) {
+        Optional<ContactModel> contact = contactRepository.findById(contactId);
+        contact.ifPresent(contactModel -> {
+            contactModel.setStatus(MakinSchoolConstants.CLOSE);
+            contactModel.setUpdatedBy(updatedBy);
+            contactModel.setUpdatedAt(LocalDateTime.now());
+        });
+//
+        ContactModel updatedContact = contactRepository.save(contact.get());
+        if (null != updatedContact && updatedContact.getUpdatedBy() != null) {
             isUpdated = true;
         }
         return isUpdated;
