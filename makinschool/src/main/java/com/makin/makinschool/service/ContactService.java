@@ -26,8 +26,6 @@ public class ContactService {
     public boolean saveMessageDetails(ContactModel contact) {
         boolean isSaved = false;
         contact.setStatus(MakinSchoolConstants.OPEN);
-        contact.setCreatedBy(MakinSchoolConstants.ANONYMOUS);
-        contact.setCreatedAt(LocalDateTime.now());
         ContactModel savedContact = contactRepository.save(contact);
         if (null != savedContact && savedContact.getContact_id() > 0) {
             isSaved = true;
@@ -50,13 +48,11 @@ public class ContactService {
      * @param contactId, updatedBy
      * @return boolean
      */
-    public boolean updateMsgStatus(int contactId, String updatedBy) {
+    public boolean updateMsgStatus(int contactId) {
         boolean isUpdated = false;
         Optional<ContactModel> contact = contactRepository.findById(contactId);
         contact.ifPresent(contactModel -> {
             contactModel.setStatus(MakinSchoolConstants.CLOSE);
-            contactModel.setUpdatedBy(updatedBy);
-            contactModel.setUpdatedAt(LocalDateTime.now());
         });
 //
         ContactModel updatedContact = contactRepository.save(contact.get());
