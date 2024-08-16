@@ -1,6 +1,6 @@
 package com.makin.makinschool.service;
 
-import com.makin.makinschool.MakinSchoolConstants;
+import com.makin.makinschool.constant.MakinSchoolConstants;
 import com.makin.makinschool.model.Person;
 import com.makin.makinschool.model.Roles;
 import com.makin.makinschool.repository.PersonRepository;

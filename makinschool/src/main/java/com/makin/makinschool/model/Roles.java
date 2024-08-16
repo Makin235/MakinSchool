@@ -7,7 +7,6 @@ import jakarta.persistence.Id;
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
-
 @Data
 @Entity
 public class Roles extends BaseEntity{
