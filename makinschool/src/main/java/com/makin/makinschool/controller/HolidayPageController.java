@@ -37,6 +37,7 @@ public class HolidayPageController {
         model.addAttribute("appName", "Makin School");
         model.addAttribute("festival", festival);
         model.addAttribute("federal", federal);
+        model.addAttribute("currentPage", "holidays");
         return "holidays";
     }
 }

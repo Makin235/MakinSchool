@@ -33,6 +33,7 @@ public class ContactPageController {
     public String displayContactPage(Model model) {
         model.addAttribute("contact", new ContactModel());
         model.addAttribute("appName", "Makin School");
+        model.addAttribute("currentPage", "contact");
         return "contact";
     }
 

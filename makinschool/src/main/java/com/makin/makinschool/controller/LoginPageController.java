@@ -32,6 +32,7 @@ public class LoginPageController {
         }
         model.addAttribute("errorMessge", errorMessge);
         model.addAttribute("appName", "Makin School");
+        model.addAttribute("currentPage", "login");
         return "login";
     }
 

@@ -10,6 +10,7 @@ public class HomePageController {
     @RequestMapping(value = {"", "/", "/home"})
     public String displayHomePage(Model model) {
         model.addAttribute("appName", "Makin School");
+        model.addAttribute("currentPage", "home");
         return "home";
     }
 }

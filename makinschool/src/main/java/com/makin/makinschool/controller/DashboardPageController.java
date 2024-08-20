@@ -23,6 +23,7 @@ public class DashboardPageController {
         model.addAttribute("username", person.getName());
         model.addAttribute("roles", authentication.getAuthorities().toString());
         model.addAttribute("appName", "Makin School");
+        model.addAttribute("currentPage", "dashboard");
         session.setAttribute("loggedInPerson", person);
         return "dashboard";
     }
