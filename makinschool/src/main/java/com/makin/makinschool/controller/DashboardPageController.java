@@ -22,6 +22,9 @@ public class DashboardPageController {
         Person person = personService.getPersonByEmail(authentication.getName());
         model.addAttribute("username", person.getName());
         model.addAttribute("roles", authentication.getAuthorities().toString());
+        if (null != person.getMakinClass() && null != person.getMakinClass().getName()) {
+            model.addAttribute("enrolledClass", person.getMakinClass().getName());
+        }
         model.addAttribute("appName", "Makin School");
         model.addAttribute("currentPage", "dashboard");
         session.setAttribute("loggedInPerson", person);
