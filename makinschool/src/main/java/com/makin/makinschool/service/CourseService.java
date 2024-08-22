@@ -4,6 +4,7 @@ import com.makin.makinschool.model.Course;
 import com.makin.makinschool.model.Person;
 import com.makin.makinschool.repository.CourseRepository;
 import com.makin.makinschool.repository.PersonRepository;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,5 +46,13 @@ public class CourseService {
         } else {
             return false;
         }
+    }
+
+    public void deleteStudentFromCourse(int studentId, Course course, HttpSession session) {
+        Optional<Person> student = personRepository.findById(studentId);
+        student.get().getCourses().remove(course);
+        course.getPersons().remove(student);
+        personRepository.save(student.get());
+        session.setAttribute("course", course);
     }
 }
