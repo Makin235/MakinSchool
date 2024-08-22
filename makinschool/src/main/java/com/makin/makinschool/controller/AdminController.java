@@ -1,7 +1,9 @@
 package com.makin.makinschool.controller;
 
+import com.makin.makinschool.model.Course;
 import com.makin.makinschool.model.MakinClass;
 import com.makin.makinschool.model.Person;
+import com.makin.makinschool.service.CourseService;
 import com.makin.makinschool.service.MakinClassService;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,9 @@ public class AdminController {
     @Autowired
     private MakinClassService makinClassService;
 
+    @Autowired
+    private CourseService courseService;
+
     @RequestMapping("/displayClasses")
     public ModelAndView displayClasses() {
         List<MakinClass> makinClasses = makinClassService.getAllClasses();
@@ -31,14 +36,6 @@ public class AdminController {
         modelAndView.addObject("makinClass", new MakinClass());
         modelAndView.addObject("appName", "Makin School");
         modelAndView.addObject("currentPage", "displayClasses");
-        return modelAndView;
-    }
-
-    @RequestMapping("/displayCourses")
-    public ModelAndView displayCourses() {
-        ModelAndView modelAndView = new ModelAndView("courses");
-        modelAndView.addObject("appName", "Makin School");
-        modelAndView.addObject("currentPage", "displayCourses");
         return modelAndView;
     }
 
@@ -93,6 +90,56 @@ public class AdminController {
         MakinClass makinClass = (MakinClass) session.getAttribute("makinClass");
         makinClassService.deleteStudent(personId, makinClass, session);
         modelAndView.setViewName("redirect:/admin/displayStudents?classId=" + makinClass.getClassId());
+        return modelAndView;
+    }
+
+    @RequestMapping("/displayCourses")
+    public ModelAndView displayCourses(HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView("courses_secure");
+        List<Course> courses = courseService.getAllCourses();
+        modelAndView.addObject("courses", courses);
+        modelAndView.addObject("course", new Course());
+        return modelAndView;
+    }
+
+    @RequestMapping("/addNewCourse")
+    public ModelAndView addCourse(@ModelAttribute("course") Course course, HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView();
+        courseService.addCourse(course);
+        modelAndView.setViewName("redirect:/admin/displayCourses");
+        return modelAndView;
+    }
+
+    @RequestMapping("/viewStudents")
+    public ModelAndView viewStudents(@RequestParam int id, HttpSession session,
+                                     @RequestParam(required = false) String error) {
+        String errorMsg = null;
+        ModelAndView modelAndView = new ModelAndView("course_students");
+        Course course = courseService.getCourse(id);
+        modelAndView.addObject("course", course);
+        modelAndView.addObject("person", new Person());
+        modelAndView.addObject("appName", "Makin School");
+        session.setAttribute("course", course);
+        if (null != error) {
+            errorMsg = "Invalid email entered!";
+            modelAndView.addObject("errorMessage", errorMsg);
+        }
+        return modelAndView;
+    }
+
+    @PostMapping("/addStudentToCourse")
+    public ModelAndView addStudentToCourse(
+            @ModelAttribute("person") Person person, HttpSession session) {
+        ModelAndView modelAndView = new ModelAndView();
+        Course course = (Course) session.getAttribute("course");
+        boolean isAdded = courseService.addStudentToCourse(person, course);
+        if (isAdded) {
+            modelAndView.setViewName("redirect:/admin/viewStudents?id="+course.getCourseId());
+            session.setAttribute("course", course);
+        } else {
+            modelAndView.setViewName("redirect:/admin/viewStudents?id="+course.getCourseId() +
+                    "&error=true");
+        }
         return modelAndView;
     }
 }

@@ -81,5 +81,5 @@ public class Person extends BaseEntity{
                 @JoinColumn(name = "person_id", referencedColumnName = "personId")},
             inverseJoinColumns = {
                 @JoinColumn(name = "course_id", referencedColumnName = "courseId")})
-    private Set<Courses> courses = new HashSet<>();
+    private Set<Course> courses = new HashSet<>();
 }
