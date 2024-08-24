@@ -5,9 +5,12 @@ import com.makin.makinschool.model.ContactModel;
 import com.makin.makinschool.repository.ContactRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -26,7 +29,7 @@ public class ContactService {
         boolean isSaved = false;
         contact.setStatus(MakinSchoolConstants.OPEN);
         ContactModel savedContact = contactRepository.save(contact);
-        if (null != savedContact && savedContact.getContact_id() > 0) {
+        if (null != savedContact && savedContact.getContactId() > 0) {
             isSaved = true;
         }
         log.info(contact.toString());
@@ -37,9 +40,13 @@ public class ContactService {
      * Get Contact Messages from DB
      * @return List<ContactModel>
      */
-    public List<ContactModel> findMsgsWithOpenStatus() {
-        List<ContactModel> contactMsgs = contactRepository.findByStatus(MakinSchoolConstants.OPEN);
-        return contactMsgs;
+    public Page<ContactModel> findMsgsWithOpenStatus(int pageNum, String sortField, String sortDir) {
+        int pageSize = 5;
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize,
+                sortDir.equals("asc") ? Sort.by(sortField).ascending() :
+                Sort.by(sortField).descending());
+        Page<ContactModel> msgPage = contactRepository.findByStatus(MakinSchoolConstants.OPEN, pageable);
+        return msgPage;
     }
 
     /**
