@@ -23,7 +23,7 @@ public class CourseService {
     private PersonRepository personRepository;
 
     public List<Course> getAllCourses() {
-        List<Course> courses = courseRepository.findAll();
+        List<Course> courses = courseRepository.findByOrderByName();
         return courses;
     }
 
