@@ -7,6 +7,7 @@ import com.makin.makinschool.repository.PersonRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +24,7 @@ public class CourseService {
     private PersonRepository personRepository;
 
     public List<Course> getAllCourses() {
-        List<Course> courses = courseRepository.findByOrderByName();
+        List<Course> courses = courseRepository.findAll(Sort.by("name").ascending());
         return courses;
     }
 
