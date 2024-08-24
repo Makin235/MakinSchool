@@ -17,12 +17,27 @@ public interface ContactRepository extends JpaRepository<ContactModel, Integer> 
 
     List<ContactModel> findByStatus(String status);
 
-    //@Query("SELECT c FROM ContactModel c WHERE c.status = :status") //JPQL
-    @Query(value = "SELECT * FROM contact_msg c WHERE c.status = :status", nativeQuery = true) //Native SQL
+    @Query("SELECT c FROM ContactModel c WHERE c.status = :status") //JPQL
+    //@Query(value = "SELECT * FROM contact_msg c WHERE c.status = :status", nativeQuery = true) //Native SQL
     Page<ContactModel> findByStatus(@Param("status") String status, Pageable pageable);
 
     @Transactional
     @Modifying
     @Query("UPDATE ContactModel c SET c.status = ?1 WHERE c.contactId =?2")
     int updateStatusById(String status, int id);
+
+    @Query(name = "ContactModel.findOpenMsgs")
+    Page<ContactModel> findOpenMsgs(@Param("status") String status, Pageable pageable);
+
+    @Query(nativeQuery = true)
+    Page<ContactModel> findOpenMsgsNative(@Param("status") String status, Pageable pageable);
+
+    @Transactional
+    @Modifying
+    int updateMsgStatus(String status, int id);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true)
+    int updateMsgStatusNative(String status, int id);
 }

@@ -54,7 +54,7 @@ public class ContactService {
      */
     public boolean updateMsgStatus(int contactId) {
         boolean isUpdated = false;
-        int rows = contactRepository.updateStatusById(MakinSchoolConstants.CLOSE, contactId);
+        int rows = contactRepository.updateMsgStatus(MakinSchoolConstants.CLOSE, contactId);
         if (rows > 0) {
             isUpdated = true;
         }
