@@ -16,12 +16,15 @@ public class ProjectSecurityConfig {
         http
             .csrf((csrf) -> csrf
                     .ignoringRequestMatchers("/saveMsg")
-                    .ignoringRequestMatchers("/public/**"))
+                    .ignoringRequestMatchers("/public/**")
+                    .ignoringRequestMatchers("/api/**")
+            )
             .authorizeHttpRequests((requests) -> requests
                     .requestMatchers("/dashboard").authenticated()
                     .requestMatchers("/displayProfile").authenticated()
                     .requestMatchers("/updateProfile").authenticated()
                     .requestMatchers("/displayMessages/**").hasRole("ADMIN")
+                    .requestMatchers("/api/**").authenticated()
                     .requestMatchers("/closeMsg/**").hasRole("ADMIN")
                     .requestMatchers("/admin/**").hasRole("ADMIN")
                     .requestMatchers("/student/**").hasRole("STUDENT")
@@ -34,9 +37,12 @@ public class ProjectSecurityConfig {
                     .requestMatchers("/assets/**").permitAll()
                     .requestMatchers("/login").permitAll()
                     .requestMatchers("/public/**").permitAll()
-                    .requestMatchers("/logout").permitAll())
+                    .requestMatchers("/logout").permitAll()
+            )
             .formLogin(loginConfigurer -> loginConfigurer.loginPage("/login")
-                    .defaultSuccessUrl("/dashboard").failureUrl("/login?error=true").permitAll())
+                    .defaultSuccessUrl("/dashboard")
+                    .failureUrl("/login?error=true").permitAll()
+            )
             .logout(logoutConfigurer -> logoutConfigurer.logoutSuccessUrl("/login?logout=true")
                     .invalidateHttpSession(true).permitAll())
             .httpBasic(Customizer.withDefaults());
