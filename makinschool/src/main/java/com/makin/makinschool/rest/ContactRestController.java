@@ -1,5 +1,6 @@
 package com.makin.makinschool.rest;
 
+import com.makin.makinschool.constant.MakinSchoolConstants;
 import com.makin.makinschool.model.ContactModel;
 import com.makin.makinschool.model.Response;
 import com.makin.makinschool.repository.ContactRepository;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -68,5 +70,22 @@ public class ContactRestController {
                 .status(HttpStatus.CREATED)
                 .header("isMsgDeleted", "true")
                 .body(response);
+    }
+
+    @PatchMapping("/closeMsg")
+    public ResponseEntity closeMsg(@RequestBody ContactModel contactReq) {
+        Response response = new Response();
+        Optional<ContactModel> contact = contactRepository.findById(contactReq.getContactId());
+        if (contact.isPresent()) {
+            contact.get().setStatus(MakinSchoolConstants.CLOSE);
+            contactRepository.save(contact.get());
+            response.setStatusCode("200");
+            response.setStatusMsg("Message closed successfully!");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            response.setStatusCode("400");
+            response.setStatusMsg("Invalid contact id received.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
     }
 }
