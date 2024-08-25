@@ -1,7 +1,7 @@
 package com.makin.makinschool.service;
 
 import com.makin.makinschool.constant.MakinSchoolConstants;
-import com.makin.makinschool.model.ContactModel;
+import com.makin.makinschool.model.Contact;
 import com.makin.makinschool.repository.ContactRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +23,10 @@ public class ContactService {
      * @param contact
      * @return boolean
      */
-    public boolean saveMessageDetails(ContactModel contact) {
+    public boolean saveMessageDetails(Contact contact) {
         boolean isSaved = false;
         contact.setStatus(MakinSchoolConstants.OPEN);
-        ContactModel savedContact = contactRepository.save(contact);
+        Contact savedContact = contactRepository.save(contact);
         if (null != savedContact && savedContact.getContactId() > 0) {
             isSaved = true;
         }
@@ -36,14 +36,14 @@ public class ContactService {
 
     /**
      * Get Contact Messages from DB
-     * @return List<ContactModel>
+     * @return List<Contact>
      */
-    public Page<ContactModel> findMsgsWithOpenStatus(int pageNum, String sortField, String sortDir) {
+    public Page<Contact> findMsgsWithOpenStatus(int pageNum, String sortField, String sortDir) {
         int pageSize = 5;
         Pageable pageable = PageRequest.of(pageNum - 1, pageSize,
                 sortDir.equals("asc") ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending());
-        Page<ContactModel> msgPage = contactRepository.findByStatus(MakinSchoolConstants.OPEN, pageable);
+        Page<Contact> msgPage = contactRepository.findByStatus(MakinSchoolConstants.OPEN, pageable);
         return msgPage;
     }
 

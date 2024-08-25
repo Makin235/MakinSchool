@@ -1,6 +1,6 @@
 package com.makin.makinschool.repository;
 
-import com.makin.makinschool.model.ContactModel;
+import com.makin.makinschool.model.Contact;
 import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,24 +13,24 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ContactRepository extends JpaRepository<ContactModel, Integer> {
+public interface ContactRepository extends JpaRepository<Contact, Integer> {
 
-    List<ContactModel> findByStatus(String status);
+    List<Contact> findByStatus(String status);
 
-    @Query("SELECT c FROM ContactModel c WHERE c.status = :status") //JPQL
+    @Query("SELECT c FROM Contact c WHERE c.status = :status") //JPQL
     //@Query(value = "SELECT * FROM contact_msg c WHERE c.status = :status", nativeQuery = true) //Native SQL
-    Page<ContactModel> findByStatus(@Param("status") String status, Pageable pageable);
+    Page<Contact> findByStatus(@Param("status") String status, Pageable pageable);
 
     @Transactional
     @Modifying
-    @Query("UPDATE ContactModel c SET c.status = ?1 WHERE c.contactId =?2")
+    @Query("UPDATE Contact c SET c.status = ?1 WHERE c.contactId =?2")
     int updateStatusById(String status, int id);
 
-    @Query(name = "ContactModel.findOpenMsgs")
-    Page<ContactModel> findOpenMsgs(@Param("status") String status, Pageable pageable);
+    @Query(name = "Contact.findOpenMsgs")
+    Page<Contact> findOpenMsgs(@Param("status") String status, Pageable pageable);
 
     @Query(nativeQuery = true)
-    Page<ContactModel> findOpenMsgsNative(@Param("status") String status, Pageable pageable);
+    Page<Contact> findOpenMsgsNative(@Param("status") String status, Pageable pageable);
 
     @Transactional
     @Modifying

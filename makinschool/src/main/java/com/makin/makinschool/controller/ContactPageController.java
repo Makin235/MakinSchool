@@ -1,6 +1,6 @@
 package com.makin.makinschool.controller;
 
-import com.makin.makinschool.model.ContactModel;
+import com.makin.makinschool.model.Contact;
 import com.makin.makinschool.service.ContactService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -33,14 +33,14 @@ public class ContactPageController {
 
     @RequestMapping("/contact")
     public String displayContactPage(Model model) {
-        model.addAttribute("contact", new ContactModel());
+        model.addAttribute("contact", new Contact());
         model.addAttribute("appName", "Makin School");
         model.addAttribute("currentPage", "contact");
         return "contact";
     }
 
     @RequestMapping(value = "/saveMsg", method = POST)
-    public String saveMessage(@Valid @ModelAttribute("contact") ContactModel contact, Errors errors) {
+    public String saveMessage(@Valid @ModelAttribute("contact") Contact contact, Errors errors) {
         if (errors.hasErrors()) {
             log.error("Contact form validation failed due to: " + errors.toString());
             return "contact";
@@ -54,9 +54,9 @@ public class ContactPageController {
                                         @RequestParam("sortField") String sortField,
                                         @RequestParam("sortDir") String sortDir,
                                         Model model) {
-        Page<ContactModel> msgPage =
+        Page<Contact> msgPage =
                 contactService.findMsgsWithOpenStatus(pageNum, sortField, sortDir);
-        List<ContactModel> contactMsgs = msgPage.getContent();
+        List<Contact> contactMsgs = msgPage.getContent();
         ModelAndView modelAndView = new ModelAndView("messages");
         modelAndView.addObject("contactMsgs", contactMsgs);
         model.addAttribute("appName", "Makin School");

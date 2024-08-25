@@ -1,7 +1,7 @@
 package com.makin.makinschool.rest;
 
 import com.makin.makinschool.constant.MakinSchoolConstants;
-import com.makin.makinschool.model.ContactModel;
+import com.makin.makinschool.model.Contact;
 import com.makin.makinschool.model.Response;
 import com.makin.makinschool.repository.ContactRepository;
 import jakarta.validation.Valid;
@@ -25,12 +25,12 @@ public class ContactRestController {
     private ContactRepository contactRepository;
 
     @GetMapping("/getMessagesByStatus")
-    public List<ContactModel> getMessagesByStatus(@RequestParam(name = "status") String status) {
+    public List<Contact> getMessagesByStatus(@RequestParam(name = "status") String status) {
         return contactRepository.findByStatus(status);
     }
 
     @GetMapping("/getMsgsByStatus")
-    public List<ContactModel> getMsgsByStatus(@RequestBody ContactModel contact) {
+    public List<Contact> getMsgsByStatus(@RequestBody Contact contact) {
         if (null != contact && null != contact.getStatus()) {
             return contactRepository.findByStatus(contact.getStatus());
         } else {
@@ -41,7 +41,7 @@ public class ContactRestController {
     @PostMapping("/saveMsg")
     public ResponseEntity<Response> saveMsg(
             @RequestHeader("invocationForm") String invocationForm,
-            @Valid @RequestBody ContactModel contact) {
+            @Valid @RequestBody Contact contact) {
          log.info(String.format("Header invocationForm = %s", invocationForm));
          contactRepository.save(contact);
          Response response = new Response();
@@ -54,13 +54,13 @@ public class ContactRestController {
     }
 
     @DeleteMapping("/deleteMsg")
-    public ResponseEntity<Response> deleteMsg(RequestEntity<ContactModel> requestEntity) {
+    public ResponseEntity<Response> deleteMsg(RequestEntity<Contact> requestEntity) {
         HttpHeaders headers = requestEntity.getHeaders();
         headers.forEach((key, value)->{
             log.info(String.format("Header '%s' = %s",
                     key, value.stream().collect(Collectors.joining("|"))));
         });
-        ContactModel contact = requestEntity.getBody();
+        Contact contact = requestEntity.getBody();
         contactRepository.deleteById(contact.getContactId());
         Response response = new Response();
         response.setStatusCode("200");
@@ -72,9 +72,9 @@ public class ContactRestController {
     }
 
     @PatchMapping("/closeMsg")
-    public ResponseEntity<Response> closeMsg(@RequestBody ContactModel contactReq) {
+    public ResponseEntity<Response> closeMsg(@RequestBody Contact contactReq) {
         Response response = new Response();
-        Optional<ContactModel> contact = contactRepository.findById(contactReq.getContactId());
+        Optional<Contact> contact = contactRepository.findById(contactReq.getContactId());
         if (contact.isPresent()) {
             contact.get().setStatus(MakinSchoolConstants.CLOSE);
             contactRepository.save(contact.get());
