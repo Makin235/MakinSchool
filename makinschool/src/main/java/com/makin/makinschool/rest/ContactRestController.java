@@ -73,7 +73,7 @@ public class ContactRestController {
     }
 
     @PatchMapping("/closeMsg")
-    public ResponseEntity closeMsg(@RequestBody ContactModel contactReq) {
+    public ResponseEntity<Response> closeMsg(@RequestBody ContactModel contactReq) {
         Response response = new Response();
         Optional<ContactModel> contact = contactRepository.findById(contactReq.getContactId());
         if (contact.isPresent()) {
