@@ -28,6 +28,7 @@ public class ContactController {
     WebClient webClient;
 
     private String makinSchoolContactUri = "http://localhost:1234/makin/api/contact/";
+
     @GetMapping("/getMessages")
     public List<Contact> getMessages(@RequestParam("status") String status) {
         return contactProxy.getMessagesByStatus(status);
@@ -43,7 +44,7 @@ public class ContactController {
     }
 
     @PostMapping("/saveMsg")
-    public ResponseEntity<Response> saveMsg(@RequestBody Contact contact){
+    public ResponseEntity<Response> saveMsg(@RequestBody Contact contact) {
         String uri = makinSchoolContactUri + "saveMsg";
         HttpHeaders headers = new HttpHeaders();
         headers.add("invocationFrom","RestTemplate");
@@ -54,7 +55,7 @@ public class ContactController {
     }
 
     @PostMapping("/saveMessage")
-    public Mono<Response> saveMessage(@RequestBody Contact contact){
+    public Mono<Response> saveMessage(@RequestBody Contact contact) {
         String uri = makinSchoolContactUri + "saveMsg";
         return webClient.post().uri(uri)
                 .header("invocationFrom","WebClient")
