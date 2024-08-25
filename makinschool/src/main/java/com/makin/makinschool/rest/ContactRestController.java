@@ -40,7 +40,7 @@ public class ContactRestController {
 
     @PostMapping("/saveMsg")
     public ResponseEntity<Response> saveMsg(
-            @RequestHeader("invocationForm") String invocationForm,
+            @RequestHeader("invocationFrom") String invocationForm,
             @Valid @RequestBody Contact contact) {
          log.info(String.format("Header invocationForm = %s", invocationForm));
          contactRepository.save(contact);
