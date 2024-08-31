@@ -5,6 +5,7 @@ import com.makin.makinschool.model.Contact;
 import com.makin.makinschool.repository.ContactRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,12 @@ public class ContactService {
 
     @Autowired
     private ContactRepository contactRepository;
+
+    @Value("${makinschool.pagination.pageSize}")
+    private int defaultPageSize;
+
+    @Value("${makinschool.msg.success}")
+    private String successMsg;
 
     /**
      * Save Contact details into DB
@@ -31,6 +38,7 @@ public class ContactService {
             isSaved = true;
         }
         log.info(contact.toString());
+        log.info(successMsg);
         return isSaved;
     }
 
@@ -39,8 +47,7 @@ public class ContactService {
      * @return List<Contact>
      */
     public Page<Contact> findMsgsWithOpenStatus(int pageNum, String sortField, String sortDir) {
-        int pageSize = 5;
-        Pageable pageable = PageRequest.of(pageNum - 1, pageSize,
+        Pageable pageable = PageRequest.of(pageNum - 1, defaultPageSize,
                 sortDir.equals("asc") ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending());
         Page<Contact> msgPage = contactRepository.findByStatusWithQuery(MakinSchoolConstants.OPEN, pageable);
