@@ -1,5 +1,6 @@
 package com.makin.makinschool.controller;
 
+import com.makin.makinschool.config.MakinSchoolProps;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,9 @@ public class LoginPageController {
     @Autowired
     private Environment environment;
 
+    @Autowired
+    private MakinSchoolProps makinSchoolProps;
+
     @RequestMapping(value = "/login", method = {RequestMethod.GET, RequestMethod.POST})
     public String displayLoginPage(
             @RequestParam(value = "error", required = false) String error,
@@ -31,7 +35,11 @@ public class LoginPageController {
         if (error != null) {
             errorMessge = "Username or Password is incorrect !!";
         } else if (logout != null) {
-            errorMessge = environment.getProperty("makinschool.msg.logout");
+            if (null != makinSchoolProps.getMsg()
+                    && null != makinSchoolProps.getMsg().get("logout")) {
+                errorMessge = makinSchoolProps.getMsg().get("logout");
+            }
+            //errorMessge = environment.getProperty("makinschool.msg.logout");
         } else if (register != null) {
             errorMessge = "You have been successfully registered !!";
         }
@@ -51,6 +59,7 @@ public class LoginPageController {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         model.addAttribute("appName", "Makin School");
+        log.info(makinSchoolProps.getBranches().get(1));
         return "redirect:/login?logout=true";
     }
 }

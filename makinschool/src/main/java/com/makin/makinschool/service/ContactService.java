@@ -1,5 +1,6 @@
 package com.makin.makinschool.service;
 
+import com.makin.makinschool.config.MakinSchoolProps;
 import com.makin.makinschool.constant.MakinSchoolConstants;
 import com.makin.makinschool.model.Contact;
 import com.makin.makinschool.repository.ContactRepository;
@@ -22,8 +23,8 @@ public class ContactService {
     @Value("${makinschool.pagination.pageSize}")
     private int defaultPageSize;
 
-    @Value("${makinschool.msg.success}")
-    private String successMsg;
+    @Autowired
+    private MakinSchoolProps makinSchoolProps;
 
     /**
      * Save Contact details into DB
@@ -38,7 +39,6 @@ public class ContactService {
             isSaved = true;
         }
         log.info(contact.toString());
-        log.info(successMsg);
         return isSaved;
     }
 
@@ -47,7 +47,12 @@ public class ContactService {
      * @return List<Contact>
      */
     public Page<Contact> findMsgsWithOpenStatus(int pageNum, String sortField, String sortDir) {
-        Pageable pageable = PageRequest.of(pageNum - 1, defaultPageSize,
+        int pageSize = defaultPageSize;
+        if (null != makinSchoolProps.getContact()
+                && null != makinSchoolProps.getContact().get("pageSize")) {
+            pageSize = Integer.parseInt(makinSchoolProps.getContact().get("pageSize").trim());
+        }
+        Pageable pageable = PageRequest.of(pageNum - 1, pageSize,
                 sortDir.equals("asc") ? Sort.by(sortField).ascending() :
                 Sort.by(sortField).descending());
         Page<Contact> msgPage = contactRepository.findByStatusWithQuery(MakinSchoolConstants.OPEN, pageable);
