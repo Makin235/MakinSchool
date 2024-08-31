@@ -18,6 +18,7 @@ public class ProjectSecurityConfig {
                     .ignoringRequestMatchers("/saveMsg")
                     .ignoringRequestMatchers("/public/**")
                     .ignoringRequestMatchers("/api/**")
+                    .ignoringRequestMatchers("/data-api/**")
             )
             .authorizeHttpRequests((requests) -> requests
                     .requestMatchers("/dashboard").authenticated()
@@ -30,7 +31,7 @@ public class ProjectSecurityConfig {
                     .requestMatchers("/student/**").hasRole("STUDENT")
                     .requestMatchers("/", "/home").permitAll()
                     .requestMatchers("/holidays/**").permitAll()
-                    .requestMatchers("/profile/**").permitAll()
+                    .requestMatchers("/data-api/**").authenticated()
                     .requestMatchers("/contact").permitAll()
                     .requestMatchers("/saveMsg").permitAll()
                     .requestMatchers("/courses").permitAll()
