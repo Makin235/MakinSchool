@@ -33,6 +33,5 @@ public class LoggerAspect {
     @AfterThrowing(value = "execution(* com.makin.makinschool..*.*(..))", throwing = "ex")
     public void logException(JoinPoint joinPoint, Exception ex) {
         log.error(joinPoint.getSignature() + " An exception occurred due to: " + ex.getMessage());
-
     }
 }

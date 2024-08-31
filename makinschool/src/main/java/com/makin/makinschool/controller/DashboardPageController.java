@@ -28,6 +28,14 @@ public class DashboardPageController {
         model.addAttribute("appName", "Makin School");
         model.addAttribute("currentPage", "dashboard");
         session.setAttribute("loggedInPerson", person);
+        logMessages();
         return "dashboard";
+    }
+
+    private void logMessages() {
+        log.error("This is an error message.");
+        log.warn("This is a warn message.");
+        log.info("This is an info message.");
+        log.trace("This is a trace message.");
     }
 }
